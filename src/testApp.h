@@ -4,6 +4,7 @@
 #include "CircularBuffer.h"
 
 
+
 class testApp : public ofBaseApp{
 	public:
 		void setup();
@@ -23,4 +24,7 @@ class testApp : public ofBaseApp{
 	ofImage* image;
 	int testBufferSize;
 	vector<ofFile> files;
+	ofTexture texture;
+	int width;
+	int height;
 };

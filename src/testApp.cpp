@@ -1,17 +1,27 @@
 #include "testApp.h"
 
 int loadCounter = 0;
+
+
 //--------------------------------------------------------------
 void testApp::setup()
 {
-	ofDirectory dir(ofToDataPath("/Volumes/PHOTOS/BUNBURY/recordings", true));
+	ofSetBackgroundAuto(false);
+	width = 1280;
+	height = 768;
+	string workPath = "/Volumes/EXTERNAL_JVC/BUNBURY/FOOTAGE/Bunbury/WebcamTwitchCaptures";
+	string homePath = "/Volumes/PHOTOS/BUNBURY/recordings";
+	string dirPath = workPath;
+	
+	ofDirectory dir(ofToDataPath(dirPath, true));
 	dir.listDir();
 	files = dir.getFiles();
 	image = new ofImage();
-	image->allocate(1024, 768, OF_IMAGE_COLOR);
+	image->allocate(width, height, OF_IMAGE_COLOR);
 	
-	testBufferSize = 100;
-	circularBuffer.setup(testBufferSize);
+	testBufferSize = 120;
+	circularBuffer.setup(testBufferSize, width, height);
+	texture.allocate(width, height, GL_RGB);
 }
 
 //--------------------------------------------------------------
@@ -26,7 +36,7 @@ void testApp::update()
 	circularBuffer.write(files[loadCounter].path());
 	
 	cout << "loadCounter---------------------->" << loadCounter << endl;
-	ofSetWindowTitle(ofToString(ofGetFrameRate()));
+	ofSetWindowTitle(ofToString(ofGetFrameRate()) + " circularBuffer.isFull(): " + ofToString(circularBuffer.isFull()));
 }
 
 //--------------------------------------------------------------
@@ -34,12 +44,16 @@ void testApp::draw(){
 	
 	if (!circularBuffer.isEmpty())
 	{
+		circularBuffer.loader.lock();
 		image = circularBuffer.read();
+		
 		//image->setUseTexture(true);
 		//image->reloadTexture();
-		image->draw(0, 0, 1024, 768);
+		texture.loadData(image->getPixelsRef());
+		texture.draw(ofRandom(-ofGetWidth(), ofGetWidth()), 0, width, height);
 		//image->setUseTexture(false);
 		//image->getTextureReference().clear();
+		circularBuffer.loader.unlock();
 		
     }
 	
