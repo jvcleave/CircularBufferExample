@@ -1,14 +1,9 @@
 #include "testApp.h"
 
-
-
-
-
-
 //--------------------------------------------------------------
 void testApp::setup()
 {
-	elem.value  = 0;
+	element.value  = 0;
 	testBufferSize = 10;
 	circularBuffer.setup(testBufferSize);
 }
@@ -17,16 +12,15 @@ void testApp::setup()
 void testApp::update()
 {
 	/* Fill buffer with test elements n times */
-	int n = ofRandom(5);
 	
-    for (elem.value = 0; elem.value < (n * testBufferSize); ++ elem.value)
+    for (element.value = 0; element.value < (n * testBufferSize); ++element.value)
 	{
-		circularBuffer.write(&elem);
+		circularBuffer.write(&element);
 	}
     while (!circularBuffer.isEmpty())
 	{
-        circularBuffer.read(&elem);
-        cout << "elem.value: " << elem.value << endl;
+        circularBuffer.read(&element);
+        cout << "element.value: " << element.value << endl;
     }  
 }
 
