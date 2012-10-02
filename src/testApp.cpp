@@ -1,31 +1,47 @@
 #include "testApp.h"
 
+int loadCounter = 0;
 //--------------------------------------------------------------
 void testApp::setup()
 {
-	element.value  = 0;
-	testBufferSize = 10;
+	ofDirectory dir(ofToDataPath("/Volumes/PHOTOS/BUNBURY/recordings", true));
+	dir.listDir();
+	files = dir.getFiles();
+	image = new ofImage();
+	image->allocate(1024, 768, OF_IMAGE_COLOR);
+	
+	testBufferSize = 100;
 	circularBuffer.setup(testBufferSize);
 }
 
 //--------------------------------------------------------------
 void testApp::update()
 {
-	/* Fill buffer with test elements n times */
-	
-    for (element.value = 0; element.value < (n * testBufferSize); ++element.value)
+	if (loadCounter<files.size()-1) 
 	{
-		circularBuffer.write(&element);
+		loadCounter++;
+	}else {
+		loadCounter = 0;
 	}
-    while (!circularBuffer.isEmpty())
-	{
-        circularBuffer.read(&element);
-        cout << "element.value: " << element.value << endl;
-    }  
+	circularBuffer.write(files[loadCounter].path());
+	
+	cout << "loadCounter---------------------->" << loadCounter << endl;
+	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	
+	if (!circularBuffer.isEmpty())
+	{
+		image = circularBuffer.read();
+		//image->setUseTexture(true);
+		//image->reloadTexture();
+		image->draw(0, 0, 1024, 768);
+		//image->setUseTexture(false);
+		//image->getTextureReference().clear();
+		
+    }
 	
 }
 

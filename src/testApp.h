@@ -20,6 +20,7 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		CircularBuffer circularBuffer;
-	Element element;
+	ofImage* image;
 	int testBufferSize;
+	vector<ofFile> files;
 };

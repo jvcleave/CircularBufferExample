@@ -2,28 +2,21 @@
 
 #include "ofMain.h"
 
-struct Element
-{
-	Element()
-	{
-		value = 0;
-	}
-	int value;
-};
+
 
 class CircularBuffer
 {
 public:
 	CircularBuffer();
-    int         size;   /* maximum number of elements           */
+    int         size;   /* maximum number of images           */
     int         start;  /* index of oldest element              */
     int         end;    /* index at which to write new element  */
 	
-    Element* elements;  /* vector of elements                   */
+    vector<ofImage*>images;  /* vector of images                   */
 	
 	void setup(int size);
 	bool isFull();
 	bool isEmpty();
-	void write(Element *elem);
-	void read(Element *elem);
+	void write(string path);
+	ofImage* read();
 };
